@@ -1,29 +1,44 @@
 '''
 storing and retrieving books from a list 
 
+next, change them to a csv file 
+
+format: name, author, read \n
 '''
+import json 
 
-books = []
-
+books_file = 'books.txt'
 #add new, retrieve...
 
 def add_book(name, author):
-    books.append({'name': name, 'author': author, 'read': False})
+    with open(books_file, 'a') as file:
+        #0 for false, 1 for true 
+        file.write(f'{name}, {author}, 0\n')
+    #books.append({'name': name, 'author': author, 'read': False})
 
 def get_all_books():
+    with open(books_file, 'r') as file:
+        lines = [line.strip().split(',') for line in file.readlines()]
+    books = [
+        {'name': line[0], 'author': line[1], 'read': line[2]}
+        for line in lines 
+    ]
     return books
 
 def mark_book_as_read(name):
-    for book in book:
+    books = get_all_books()
+    for book in books:
         if book['name'] == name:
-            book['read'] = True 
+            book['read'] == '1'
+    _save_all_books(books)
+
+def _save_all_books(books):
+    with open(books_file, 'w') as file:
+        for book in books:
+            file.write(f"{book['name']}, {book['author']}, {book['read']}\n")
 
 def delete_book(name):
-    # for book in books:
-    #     if book['name'] == name:
-    #         books.remove(book)
-    global books #makes it a global variable 
-    #add each book to new list if name isn't equal 
+    books = get_all_books()
     books = [book for book in books if book['name'] != name]
-
+    _save_all_books(books)
 
